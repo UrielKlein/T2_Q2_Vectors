@@ -53,14 +53,20 @@ Vector::Vector(int max)
 {
 	if (max < 0)
 		cout << "ERROR" << endl;
-	else
+	else{
 		capacity = max;
+		data = new int[max];
+		size=0;
+	}
 }
+
 Vector::~Vector()
 {
 	if (size)
 		delete[] data;
+	data = NULL;
 }
+
 Vector::Vector(const Vector& v)
 {
 	capacity = v.capacity;
@@ -69,14 +75,17 @@ Vector::Vector(const Vector& v)
 	for (int i = 0; i < size; i++)
 		data[i] = v.data[i];
 }
+
 int Vector::getCapacity()
 {
 	return capacity;
 }
+
 int Vector::getSize()
 {
 	return size;
 }
+
 void Vector::print()
 {
 	cout << "capacity: " << capacity << " size: " << size << " values: ";
@@ -84,6 +93,7 @@ void Vector::print()
 		cout << data[i] << " ";
 	cout << endl;
 }
+
 bool Vector::isEqual(Vector v)
 {
 	if (size == v.size)
@@ -96,6 +106,7 @@ bool Vector::isEqual(Vector v)
 	else
 		return false;
 }
+
 int Vector::strcatcat(Vector v)
 {
 	if (size != v.size)
@@ -108,6 +119,7 @@ int Vector::strcatcat(Vector v)
 		sum += data[i] * v.data[i];
 	return sum;
 }
+
 Vector Vector::strnewcat(Vector v)
 {
 	Vector temp(size+v.size);
@@ -118,12 +130,14 @@ Vector Vector::strnewcat(Vector v)
 	temp.size = v.size + size;
 	return temp;
 }
+
 void Vector::clear()
 {
 	for (int i = 0; i < size; i++)
 		data[i] = 0;
 	size = 0;
 }
+
 void Vector::delLast()
 {
 	if (size == 0)
@@ -134,10 +148,11 @@ void Vector::delLast()
 		size = size - 1;
 	}
 }
+
 void Vector::insert(int value)
 {
-	while (size + 1 > capacity)
-		capacity *= 2;;
+	if (size + 1 > capacity)
+		capacity *= 2;
 	int* p = new int[capacity];
 	for (int i = 0; i < size; i++)
 		p[i] = data[i];
@@ -146,23 +161,26 @@ void Vector::insert(int value)
 	data = p;
 	size += 1;
 }
+
 void Vector::assign(Vector v)
 {
 	capacity = v.capacity;
 	size = v.size;
+	delete[] data;
 	data = new int[capacity];
 	for (int i = 0; i < size; i++)
 		data[i] = v.data[i];
 }
+
 int& Vector::at(int index)
 {
-	if (index >= size)
+	if ((index >= size) || (index < 0))
 	{
 		cout << "ERROR" << endl;
 		return *data;
 	}
-	else if (index < 0)
-		cout << "ERROR" << endl;
+	//else if (index < 0)
+	//	cout << "ERROR" << endl;
 	else
 		return *(data + index);
 }
